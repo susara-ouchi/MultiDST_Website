@@ -1,40 +1,38 @@
-from fastapi import FastAPI, Form, Request
-from fastapi.responses import HTMLResponse, FileResponse
-from fastapi.staticfiles import StaticFiles
-from fastapi.templating import Jinja2Templates
-import matplotlib.pyplot as plt
-import random
-from multidst.utils.visualization import sigindex_plot
+from fastapi import FastAPI
+from pydantic import BaseModel
 from multidst.functions import multitest
-import os
+import random
+
+class P_Values(BaseModel):
+    p_values: str
 
 app = FastAPI()
 
-app.mount("/static", StaticFiles(directory="app/static"), name="static")
-templates = Jinja2Templates(directory="app/templates")
 
-def generate_plot(p_values, methods):
+@app.get("/")
+async def root():
+    return {"message": "Hello World"}
+
+
+#send p values and methods
+@app.post("/analyze")
+async def analyze(request:P_Values):
+    #number_tuple = [random.uniform(0,0.03) for i in range(1000)]
+    #p_values = "0.0000085,0.000023,0.000152,0.0016024,0.0040207,0.02212,0.024306,0.032078,0.036851"
+    number_strings = request.p_values.split(',')
+    number_list = [float(num) for num in number_strings]
+    number_tuple = tuple(number_list)
     # Carry out MultiDST for a list of p_values
-    res = multitest(p_values, alpha=0.05, sigplot=False)
-    results = {method: res[method] for method in methods}
-    
-    sig_indices = [results[method] for method in methods]
-    sig_plot = sigindex_plot(methods, sig_indices, title="Significant Index Plot")
-
-    # Save the plot as an image file
-    plot_filename = 'app/static/sig_index_plot.png'
-    plt.savefig(plot_filename)
-    plt.close()
-    
-    return plot_filename, results
-
-@app.get("/", response_class=HTMLResponse)
-async def read_root(request: Request):
-    return templates.TemplateResponse("index.html", {"request": request})
-
-@app.post("/analyze", response_class=HTMLResponse)
-async def analyze(request: Request, p_values: str = Form(...), methods: str = Form(...)):
-    p_values = list(map(float, p_values.split(',')))
-    methods = methods.split(',')
-    plot_filename, results = generate_plot(p_values, methods)
-    return templates.TemplateResponse("index.html", {"request": request, "plot_url": plot_filename, "significant_values": results})
+    res = multitest(number_tuple, alpha=0.05, sigplot=False)
+    if isinstance(res, dict):
+        return {
+            "Bonferroni": res["Bonferroni"],
+            "Holm": res["Holm"],
+            "SGoF": res["SGoF"],
+            "BH": res["BH"],
+            "BY": res["BY"],
+            "Q-value": res["Q-value"]
+        }
+    else:
+        return {"error": "Unexpected result format from multitest"}
+#get results  

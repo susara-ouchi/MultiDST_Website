@@ -46,6 +46,7 @@
                 <p>Please enter (copy-paste) your p-values into the allotted space and select the relevant correction method(s). For more information, please refer to our paper.</p>
             </div>
         </div>
+        <from action="/analyze" method="post">
         <div class="row mt-5 gx-5">
             <div class="col">
                 <h5>Step 1: Enter list of p-values:</h5>
@@ -83,7 +84,7 @@
                     <input class="form-check-input" type="checkbox" name="correctionMethod" id="sgof" />
                     <label class="form-check-label" for="sgof"> SGoF Test (Sequential Goodness-of-Fit) </label>
                 </div>
-                <button type="button" class="btn btn-primary mt-4">Step 3: Start Analysis</button>
+                <button type="submit" class="btn btn-primary mt-4" onclick="">Step 3: Start Analysis</button>
             </div>
             <div class="col">
                 <h5>Results</h5>
@@ -119,6 +120,7 @@
                 </div>
             </div>
         </div>
+    </from>
     </div>
     
     <!-- Bootstrap JS and Popper.js -->
