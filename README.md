@@ -12,6 +12,4 @@
   |Q-value |
   |pi0 |
   |estimate|
-### API
-Input:\
-Output:\
+### 
