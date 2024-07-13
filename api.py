@@ -24,7 +24,10 @@ async def analyze(request:P_Values):
     g2_index = []
     multidst_hist(number_tuple, g2_index, title="Histogram of p-values",col1 = 'skyblue', col2 = 'purple')
     #sigplot
-    
+    methods = ['Bonferroni', 'Holm', 'SGoF', 'BH', 'BY', 'Q value']
+    res = multitest(number_tuple, alpha=0.05, sigplot=True)
+    sig_indices = [res['Bonferroni'], res['Holm'], res['SGoF'], res['BH'], res['BY'], res['Q-value']]
+    sigindex_plot(methods, sig_indices, title=None, save_plot=True) 
     # Carry out MultiDST for a list of p_values
     res = multitest(number_tuple, alpha=0.05, sigplot=False)
     if isinstance(res, dict):
