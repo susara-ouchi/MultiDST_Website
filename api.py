@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
 from multidst.functions import multitest
-from multidst.utils.visualization import multidst_hist
+from multidst.utils.visualization import multidst_hist , sigindex_plot
 
 class P_Values(BaseModel):
     p_values: str
