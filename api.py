@@ -22,6 +22,7 @@ async def analyze(request:P_Values):
     number_tuple = tuple(number_list)
     #unique_plot_name
     ts = str(time.time())
+    ts=ts.replace('.','')
     #Histogram
     g2_index = []
     multidst_hist(number_tuple, g2_index, title="Histogram of p-values",col1 = 'skyblue', col2 = 'purple', save_plot=True, timestamp=ts)
