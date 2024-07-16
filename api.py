@@ -41,7 +41,8 @@ async def analyze(request:P_Values):
             "BH": res["BH"],
             "BY": res["BY"],
             "Q-value": res["Q-value"],
-            "time":ts
+            "sigindexplot":f"sigplot{ts}",
+            "hist":f"hist{ts}"
         }
     else:
         return {"error": "Unexpected result format from multitest"}
