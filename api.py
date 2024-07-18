@@ -2,11 +2,16 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 from multidst.functions import multitest
 from multidst.utils.visualization import multidst_hist , sigindex_plot
+from fastapi.staticfiles import StaticFiles
+
 import time 
 class P_Values(BaseModel):
     p_values: str
 
 app = FastAPI()
+
+# Serve the images directory
+app.mount("/images", StaticFiles(directory="images"), name="images")
 
 # to run the uvicorn dev server uvicorn api:app
 @app.get("/")
