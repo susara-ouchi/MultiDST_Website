@@ -1,2 +1,4 @@
 env
-images/
+.vercel
+venv/
+__pycache__/
